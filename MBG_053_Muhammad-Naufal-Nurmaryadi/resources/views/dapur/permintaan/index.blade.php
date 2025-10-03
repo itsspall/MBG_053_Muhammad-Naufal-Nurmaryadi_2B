@@ -5,10 +5,6 @@
     <h1>Daftar Permintaan Saya</h1>
     <a href="{{ route('dapur.permintaan.create') }}" class="btn btn-primary mb-3">Buat Permintaan Baru</a>
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
     @foreach($permintaans as $permintaan)
         <div class="card mb-3">
             <div class="card-header d-flex justify-content-between">

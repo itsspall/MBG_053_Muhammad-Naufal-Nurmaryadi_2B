@@ -31,7 +31,7 @@ class BahanBakuController extends Controller
 
         BahanBakuModel::create($validated);
 
-        return redirect()->route('bahanbaku.index')->with('success', 'Bahan baku berhasil ditambahkan!');
+        return redirect()->route('gudang.bahan-baku.index')->with('success', 'Bahan baku berhasil ditambahkan!');
     }
 
     public function edit(BahanBakuModel $bahanBaku)
@@ -52,7 +52,7 @@ class BahanBakuController extends Controller
         
         $bahanBaku->update($validated);
 
-        return redirect()->route('bahanbaku.index')->with('success', 'Data bahan baku berhasil diupdate!');
+        return redirect()->route('gudang.bahan-baku.index')->with('success', 'Data bahan baku berhasil diupdate!');
     }
 
     public function destroy(BahanBakuModel $bahanBaku)
@@ -62,6 +62,6 @@ class BahanBakuController extends Controller
         }
 
         $bahanBaku->delete();
-        return redirect()->route('bahanbaku.index')->with('success', 'Bahan baku kadaluarsa berhasil dihapus.');
+        return redirect()->route('gudang.bahan-baku.index')->with('success', 'Bahan baku kadaluarsa berhasil dihapus.');
     }
 }

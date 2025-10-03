@@ -56,3 +56,42 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+<script>
+    const bahanTersedia = @json($bahanTersedia);
+    let rowIndex = 0;
+
+    document.getElementById('add-bahan').addEventListener('click', function() {
+        const tr = document.createElement('tr');
+        
+        let selectHtml = `<select name="bahan[${rowIndex}][id]" class="form-select" required>`;
+        selectHtml += `<option value="">-- Pilih Bahan --</option>`;
+        bahanTersedia.forEach(bahan => {
+            selectHtml += `<option value="${bahan.id}">${bahan.nama} (Stok: ${bahan.jumlah} ${bahan.satuan})</option>`;
+        });
+        selectHtml += `</select>`;
+
+        const jumlahInput = `<input type="number" name="bahan[${rowIndex}][jumlah]" class="form-control" required min="1">`;
+        
+        const deleteButton = `<button type="button" class="btn btn-danger btn-sm delete-row">Hapus</button>`;
+
+        tr.innerHTML = `
+            <td>${selectHtml}</td>
+            <td>${jumlahInput}</td>
+            <td>${deleteButton}</td>
+        `;
+
+        // Tambahkan baris baru ke dalam tabel
+        document.getElementById('bahan-list').appendChild(tr);
+        rowIndex++;
+    });
+
+    // Event listener untuk tombol hapus (menggunakan event delegation)
+    document.getElementById('bahan-list').addEventListener('click', function(e) {
+        if (e.target && e.target.classList.contains('delete-row')) {
+            e.target.closest('tr').remove();
+        }
+    });
+</script>
+@endpush

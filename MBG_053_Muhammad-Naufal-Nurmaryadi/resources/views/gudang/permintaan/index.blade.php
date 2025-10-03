@@ -5,13 +5,6 @@
 @section('content')
     <h1>Daftar Permintaan Masuk</h1>
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-    @if(session('error'))
-        <div class="alert alert-danger">{{ session('error') }}</div>
-    @endif
-
     <div class="accordion" id="accordionPermintaan">
         @forelse($permintaans as $permintaan)
             <div class="accordion-item">

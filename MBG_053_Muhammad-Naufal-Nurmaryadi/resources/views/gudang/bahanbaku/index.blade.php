@@ -4,10 +4,6 @@
 @section('content')
     <h1>Daftar Bahan Baku</h1>
     <a href="{{ route('gudang.bahan-baku.create') }}" class="btn btn-primary mb-3">Tambah Bahan Baku</a>
-
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
     
     <table class="table table-bordered">
         <thead>
@@ -41,7 +37,7 @@
                     <form action="{{ route('gudang.bahan-baku.destroy', $bahan->id) }}" method="POST" class="d-inline">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus?')">Hapus</button>
+                        <button type="submit" class="btn btn-danger btn-sm delete-button">Hapus</button>
                     </form>
                 </td>
             </tr>
