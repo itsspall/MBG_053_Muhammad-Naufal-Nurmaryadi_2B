@@ -24,7 +24,15 @@
                 <h6>Bahan yang diminta:</h6>
                 <ul>
                     @foreach($permintaan->details as $detail)
-                        <li>{{ $detail->bahanBaku->nama }} - {{ $detail->jumlah_diminta }} {{ $detail->bahanBaku->satuan }}</li>
+                        @if($detail->bahanBaku)
+                            <li>
+                                {{ $detail->bahanBaku->nama }} - {{ $detail->jumlah_diminta }} {{ $detail->bahanBaku->satuan }}
+                            </li>
+                        @else
+                            <li class="text-danger fst-italic">
+                                -- Data bahan baku untuk item ini telah dihapus --
+                            </li>
+                        @endif
                     @endforeach
                 </ul>
             </div>

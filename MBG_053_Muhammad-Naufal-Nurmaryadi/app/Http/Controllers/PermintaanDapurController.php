@@ -15,6 +15,7 @@ class PermintaanDapurController extends Controller
                                 ->with('pemohon', 'details.bahanBaku')
                                 ->latest()
                                 ->get();
+        // dd($permintaans->toArray());
         return view('dapur.permintaan.index', compact('permintaans'));
     }
 
@@ -22,8 +23,9 @@ class PermintaanDapurController extends Controller
     {
         $bahanTersedia = BahanBaku::where('jumlah', '>', 0)
                                 ->get()
-                                ->filter(fn($bahan) => $bahan->status !== 'kadaluarsa');
-                                
+                                ->filter(fn($bahan) => $bahan->status !== 'kadaluarsa')
+                                ->values();
+
         return view('dapur.permintaan.create', compact('bahanTersedia'));
     }
 
@@ -56,6 +58,7 @@ class PermintaanDapurController extends Controller
                 ]);
             }
         });
+        
 
         return redirect()->route('dapur.permintaan.index')->with('success', 'Permintaan berhasil dibuat!');
     }

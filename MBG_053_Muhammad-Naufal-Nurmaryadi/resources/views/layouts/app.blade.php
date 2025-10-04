@@ -98,7 +98,6 @@
         });
     </script>
     
-    {{-- 3. Sisakan @stack untuk script spesifik dari halaman lain (jika ada) --}}
     @stack('scripts')
 </body>
 </html>

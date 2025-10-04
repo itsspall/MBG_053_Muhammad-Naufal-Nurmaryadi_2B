@@ -22,19 +22,24 @@ class PermintaanGudangController extends Controller
         ]);
 
         if ($request->status == 'disetujui') {
-            DB::transaction(function () use ($permintaan) {
-                foreach ($permintaan->details as $detail) {
-                    $bahan = $detail->bahanBaku;
-                    if ($bahan->jumlah < $detail->jumlah_diminta) {
-                        // Error handling: jika stok tidak cukup = batalkan transaksi
-                        throw new \Exception('Stok ' . $bahan->nama . ' tidak mencukupi.');
+            try {
+                DB::transaction(function () use ($permintaan) {
+                    foreach ($permintaan->details as $detail) {
+                        $bahan = $detail->bahanBaku;
+                        if ($bahan->jumlah < $detail->jumlah_diminta) {
+                            // munculkan exception jika stok tidak mencukupi
+                            throw new \Exception('Stok ' . $bahan->nama . ' tidak mencukupi.');
+                        }
+                        $bahan->decrement('jumlah', $detail->jumlah_diminta);
                     }
-                    $bahan->decrement('jumlah', $detail->jumlah_diminta);
-                }
-                $permintaan->update(['status' => 'disetujui']);
-            });
+                    $permintaan->update(['status' => 'disetujui']);
+                });
+
+            } catch (\Exception $e) {
+                // mengambil exception, lalu menampilkan pesan error
+                return redirect()->back()->with('error', $e->getMessage());
+            }
         } else {
-            // Error handling: jika ditolak = update status
             $permintaan->update(['status' => 'ditolak']);
         }
 
