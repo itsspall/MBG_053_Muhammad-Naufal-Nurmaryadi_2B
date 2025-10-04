@@ -5,76 +5,112 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Aplikasi MBG')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         body { background-color: #f8f9fa; }
-        .navbar { box-shadow: 0 2px 4px rgba(0,0,0,.1); }
-        .navbar-nav .nav-link.active {
-            font-weight: bold;
-            color: #0d6efd !important;
+        .navbar { 
+            box-shadow: 0 2px 4px rgba(0,0,0,.05);
+            border-bottom: 1px solid #dee2e6;
+        }
+        .dropdown-menu {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, .15);
+            border: none;
+            min-width: 15rem;
+        }
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .dropdown-item i {
+            width: 1.25rem; /* Ensure icons align nicely */
+            text-align: center;
+        }
+        .dropdown-item.active, .dropdown-item:active {
+            background-color: #e9ecef;
+            color: #000;
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-white mb-4">
-        <div class="container">
-            <a class="navbar-brand" href="/">Pemantauan Bahan Baku</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                
-                @auth
-                    <ul class="navbar-nav mx-auto">
-                        @if(auth()->user()->role === 'gudang')
-                            <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('gudang.bahan-baku.*') ? 'active' : '' }}" href="{{ route('gudang.bahan-baku.index') }}">Bahan Baku</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+        <div class="container-fluid px-4">
+            {{-- Brand Logo di Kiri --}}
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="bi bi-box-seam-fill me-2 text-primary"></i>
+                <span>MBG Stock</span>
+            </a>
+            
+            {{-- Dropdown Pengguna di Kanan --}}
+            @auth
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle fs-5 me-2"></i>
+                            <span>{{ auth()->user()->name }}</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            {{-- User Info Header --}}
+                            <li>
+                                <div class="px-3 py-2">
+                                    <div class="fw-bold">{{ auth()->user()->name }}</div>
+                                    <small class="text-muted">{{ auth()->user()->email }}</small>
+                                </div>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('gudang.permintaan.*') ? 'active' : '' }}" href="{{ route('gudang.permintaan.index') }}">Permintaan Masuk</a>
-                            </li>
-                        @elseif(auth()->user()->role === 'dapur')
-                            <li class="nav-item">
-                                <a class="nav-link {{ request()->routeIs('dapur.permintaan.*') ? 'active' : '' }}" href="{{ route('dapur.permintaan.index') }}">Permintaan Saya</a>
-                            </li>
-                        @endif
-                    </ul>
-                @endauth
-
-                <ul class="navbar-nav ms-auto"> {{-- Menggunakan ms-auto agar ke kanan --}}
-                    @auth
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                {{ auth()->user()->name }}
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><hr class="dropdown-divider"></li>
+                            
+                            {{-- Menu Navigasi Sesuai Role --}}
+                            @if(auth()->user()->role === 'gudang')
                                 <li>
-                                    <form action="{{ route('logout') }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="dropdown-item">Logout</button>
-                                    </form>
+                                    <a class="dropdown-item {{ request()->routeIs('gudang.bahan-baku.*') ? 'active' : '' }}" href="{{ route('gudang.bahan-baku.index') }}">
+                                        <i class="bi bi-boxes"></i> <span>Bahan Baku</span>
+                                    </a>
                                 </li>
-                            </ul>
-                        </li>
-                    @endauth
+                                <li>
+                                    <a class="dropdown-item {{ request()->routeIs('gudang.permintaan.*') ? 'active' : '' }}" href="{{ route('gudang.permintaan.index') }}">
+                                        <i class="bi bi-inbox-fill"></i> <span>Permintaan Masuk</span>
+                                    </a>
+                                </li>
+                            @elseif(auth()->user()->role === 'dapur')
+                                <li>
+                                    <a class="dropdown-item {{ request()->routeIs('dapur.permintaan.index') ? 'active' : '' }}" href="{{ route('dapur.permintaan.index') }}">
+                                        <i class="bi bi-journal-text"></i> <span>Permintaan Saya</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item {{ request()->routeIs('dapur.permintaan.create') ? 'active' : '' }}" href="{{ route('dapur.permintaan.create') }}">
+                                        <i class="bi bi-plus-circle"></i> <span>Buat Permintaan Baru</span>
+                                    </a>
+                                </li>
+                            @endif
+                            
+                            <li><hr class="dropdown-divider"></li>
+
+                            {{-- Tombol Logout --}}
+                            <li>
+                                <form action="{{ route('logout') }}" method="POST" class="w-100">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item text-danger">
+                                        <i class="bi bi-box-arrow-right"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
-            </div>
+            @endauth
         </div>
     </nav>
 
-    <main class="container">
+    <main class="container py-4">
         @yield('content')
     </main>
 
     {{-- JAVASCRIPT SECTION --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    
-    {{-- 1. Load library SweetAlert terlebih dahulu --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-    {{-- 2. Baru panggil script notifikasi yang menggunakan library tersebut --}}
     @include('partials.sweetalert')
 
-    {{-- Script untuk konfirmasi hapus (tidak perlu di-push dari layout) --}}
     <script>
         document.addEventListener('click', function(e) {
             if (e.target && e.target.classList.contains('delete-button')) {

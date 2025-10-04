@@ -7,9 +7,17 @@ use Illuminate\Http\Request;
 
 class BahanBakuController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $bahanBakus = BahanBakuModel::latest()->get();
+        $query = BahanBakuModel::query();
+        if ($request->has('search') && $request->search != '') {
+            $query->where('nama', 'like', '%' . $request->search . '%');
+        }
+        if ($request->has('status') && $request->status != '') {
+            $query->where('status', $request->status);
+        }
+        $bahanBakus = $query->latest()->get();
+
         return view('gudang.bahanbaku.index', compact('bahanBakus'));
     }
 
