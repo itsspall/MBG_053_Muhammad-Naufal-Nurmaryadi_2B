@@ -5,10 +5,11 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BahanBakuModel extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'bahan_baku';
 
@@ -37,5 +38,10 @@ class BahanBakuModel extends Model
             return 'segera_kadaluarsa';
         }
         return 'tersedia';
+    }
+
+    public function permintaanDetails()
+    {
+        return $this->hasMany(PermintaanDetail::class, 'bahan_id');
     }
 }
