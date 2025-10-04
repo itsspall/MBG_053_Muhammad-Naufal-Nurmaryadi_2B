@@ -2,56 +2,89 @@
 @section('title', 'Tambah Bahan Baku Baru')
 
 @section('content')
-    <h1>Tambah Bahan Baku Baru</h1>
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <form action="{{ route('gudang.bahan-baku.store') }}" method="POST">
+            @csrf
 
-    <div class="card">
-        <div class="card-body">
-            <form action="{{ route('gudang.bahan-baku.store') }}" method="POST">
-                @csrf
-                <div class="row">
-                    <div class="col-md-6 mb-3">
+            <div class="card">
+                {{-- Card Header dengan Judul dan Ikon --}}
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="bi bi-plus-square me-2"></i>
+                        Tambah Bahan Baku Baru
+                    </h5>
+                    <a href="{{ route('gudang.bahan-baku.index') }}" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Batal
+                    </a>
+                </div>
+
+                <div class="card-body">
+                    {{-- Informasi Dasar --}}
+                    <div class="mb-3">
                         <label for="nama" class="form-label">Nama Bahan</label>
-                        <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" value="{{ old('nama') }}" required>
-                        @error('nama') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-tag-fill"></i></span>
+                            <input type="text" class="form-control @error('nama') is-invalid @enderror" id="nama" name="nama" value="{{ old('nama') }}" required>
+                            @error('nama') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
                     </div>
-                    <div class="col-md-6 mb-3">
+
+                    <div class="mb-4">
                         <label for="kategori" class="form-label">Kategori</label>
-                        <input type="text" class="form-control @error('kategori') is-invalid @enderror" id="kategori" name="kategori" value="{{ old('kategori') }}">
-                        @error('kategori') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-bookmark-fill"></i></span>
+                            <input type="text" class="form-control @error('kategori') is-invalid @enderror" id="kategori" name="kategori" value="{{ old('kategori') }}">
+                            @error('kategori') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    {{-- Informasi Stok --}}
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <label for="jumlah" class="form-label">Jumlah Stok & Satuan</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-box-fill"></i></span>
+                                <input type="number" class="form-control @error('jumlah') is-invalid @enderror" id="jumlah" name="jumlah" value="{{ old('jumlah') }}" placeholder="Jumlah" required>
+                                <input type="text" class="form-control @error('satuan') is-invalid @enderror" id="satuan" name="satuan" value="{{ old('satuan') }}" placeholder="Satuan (kg, liter, butir)" required>
+                                @error('jumlah') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                                @error('satuan') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="form-text">Masukkan jumlah stok dan satuannya (contoh: 100 kg).</div>
+                        </div>
+                    </div>
+
+                    {{-- Informasi Tanggal --}}
+                    <div class="row mt-3">
+                        <div class="col-md-6 mb-3">
+                            <label for="tanggal_masuk" class="form-label">Tanggal Masuk</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-calendar-plus-fill"></i></span>
+                                <input type="date" class="form-control @error('tanggal_masuk') is-invalid @enderror" id="tanggal_masuk" name="tanggal_masuk" value="{{ old('tanggal_masuk') }}" required>
+                                @error('tanggal_masuk') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="tanggal_kadaluarsa" class="form-label">Tanggal Kadaluarsa</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-calendar-x-fill"></i></span>
+                                <input type="date" class="form-control @error('tanggal_kadaluarsa') is-invalid @enderror" id="tanggal_kadaluarsa" name="tanggal_kadaluarsa" value="{{ old('tanggal_kadaluarsa') }}" required>
+                                @error('tanggal_kadaluarsa') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="jumlah" class="form-label">Jumlah Stok</label>
-                        <input type="number" class="form-control @error('jumlah') is-invalid @enderror" id="jumlah" name="jumlah" value="{{ old('jumlah') }}" required>
-                        @error('jumlah') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="satuan" class="form-label">Satuan</label>
-                        <input type="text" class="form-control @error('satuan') is-invalid @enderror" id="satuan" name="satuan" value="{{ old('satuan') }}" placeholder="Contoh: kg, liter, butir" required>
-                        @error('satuan') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                    </div>
+                {{-- Card Footer untuk Tombol Aksi --}}
+                <div class="card-footer text-end">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle-fill me-2"></i>Simpan
+                    </button>
                 </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="tanggal_masuk" class="form-label">Tanggal Masuk</label>
-                        <input type="date" class="form-control @error('tanggal_masuk') is-invalid @enderror" id="tanggal_masuk" name="tanggal_masuk" value="{{ old('tanggal_masuk') }}" required>
-                        @error('tanggal_masuk') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="tanggal_kadaluarsa" class="form-label">Tanggal Kadaluarsa</label>
-                        <input type="date" class="form-control @error('tanggal_kadaluarsa') is-invalid @enderror" id="tanggal_kadaluarsa" name="tanggal_kadaluarsa" value="{{ old('tanggal_kadaluarsa') }}" required>
-                        @error('tanggal_kadaluarsa') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                    </div>
-                </div>
-
-                <div class="d-flex justify-content-end">
-                    <a href="{{ route('gudang.bahan-baku.index') }}" class="btn btn-secondary me-2">Batal</a>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
+</div>
 @endsection
